@@ -13,21 +13,20 @@
 					var namespaces = [];
 				    var prefixes = [];
 				    
-				    document.querySelectorAll("[data-xsd2html2xml-namespace]:not([data-xsd2html2xml-namespace=''])").forEach(function(o) {
-				    	if (namespaces.indexOf(
-				    		o.getAttribute("data-xsd2html2xml-namespace")
-				    	) == -1) {
-					    	namespaces.push(
-					    		o.getAttribute("data-xsd2html2xml-namespace")
-					    	);
-					    	
-					    	prefixes.push(
-					    		o.getAttribute("data-xsd2html2xml-name").substring(
-				    				0, o.getAttribute("data-xsd2html2xml-name").indexOf(":")
-				    			)
-				    		);
-				    	}
-				    });
+					document.querySelectorAll("[data-xsd2html2xml-namespace]:not([data-xsd2html2xml-namespace=''])").forEach(function(o) {
+						var name = o.getAttribute("data-xsd2html2xml-name");
+						var prefix = name.substring(0, name.indexOf(":"));
+						var namespaceUri = o.getAttribute("data-xsd2html2xml-namespace");
+						var namespacePosition = namespaces.indexOf(namespaceUri);
+						if (namespacePosition == -1) {
+							namespaces.push(
+								o.getAttribute("data-xsd2html2xml-namespace")
+							);
+							prefixes.push(prefix);
+						} else if (!prefixes[namespacePosition]) {
+							prefixes[namespacePosition] = prefix;
+						}
+					});
 				    
 				    var namespaceString = "";
 				    
